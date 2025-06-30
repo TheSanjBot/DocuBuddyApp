@@ -25,7 +25,8 @@ class EmbeddingsManager:
 
         self.embeddings = HuggingFaceEmbeddings(
             model_name=self.model_name,
-            model_kwargs={"device": self.device}
+            model_kwargs={"device": self.device},
+            encode_kwargs={"normalize_embeddings": True}
         )
 
 
