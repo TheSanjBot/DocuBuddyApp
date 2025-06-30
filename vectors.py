@@ -1,7 +1,7 @@
 import os
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Qdrant
 import streamlit as st
 
@@ -10,7 +10,6 @@ class EmbeddingsManager:
         self,
         model_name: str = "BAAI/bge-small-en",
         device: str = "cpu",
-        encode_kwargs: dict = {"normalize_embeddings": True},
         qdrant_url: str = st.secrets["QDRANT_URL"],    # Replace with actual
         qdrant_api_key: str = st.secrets["QDRANT_API_KEY"],  # Replace with your API key
         collection_name: str = "vector_db",
@@ -20,16 +19,15 @@ class EmbeddingsManager:
         """
         self.model_name = model_name
         self.device = device
-        self.encode_kwargs = encode_kwargs
         self.qdrant_url = qdrant_url
         self.qdrant_api_key = qdrant_api_key
         self.collection_name = collection_name
 
-        self.embeddings = HuggingFaceBgeEmbeddings(
+        self.embeddings = HuggingFaceEmbeddings(
             model_name=self.model_name,
-            model_kwargs={"device": self.device},
-            encode_kwargs=self.encode_kwargs,
+            model_kwargs={"device": self.device}
         )
+
 
     def create_embeddings(self, pdf_path: str):
         """
