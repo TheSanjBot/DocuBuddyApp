@@ -28,3 +28,4 @@ numpy>=2.1.0,<2.3.0
 pydantic==2.11.1
 typing-extensions==4.14.0
 requests==2.32.4
+langchain-huggingface==0.1.1
