@@ -1,6 +1,6 @@
 # chatbot.py
 import streamlit as st
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Qdrant
 from langchain_community.chat_models import ChatOpenAI
 from qdrant_client import QdrantClient
@@ -18,10 +18,10 @@ class ChatbotManager:
         device: str = "cpu",
     ):
         # Set up embeddings
-        self.embeddings = HuggingFaceBgeEmbeddings(
-            model_name=model_name,
-            model_kwargs={"device": device},
-            encode_kwargs={"normalize_embeddings": True}
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=self.model_name,
+            model_kwargs={"device": self.device},
+            encode_kwargs=self.encode_kwargs,
         )
 
         # Connect to Qdrant Cloud
