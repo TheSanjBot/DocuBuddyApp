@@ -13,7 +13,8 @@ qdrant-client==1.14.3
 
 # HuggingFace Embeddings (BGE-small)
 sentence-transformers==2.6.1
-huggingface-hub==0.20.3
+langchain-huggingface==0.1.1
+# huggingface-hub – Let pip auto-resolve the correct version
 
 # Unstructured PDF loading
 unstructured==0.18.1
@@ -28,4 +29,3 @@ numpy>=2.1.0,<2.3.0
 pydantic==2.11.1
 typing-extensions==4.14.0
 requests==2.32.4
-langchain-huggingface==0.1.1
