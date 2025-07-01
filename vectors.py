@@ -1,9 +1,9 @@
 import os
-import streamlit as st
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.document_loaders import PyMuPDFLoader 
+from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Qdrant
+import streamlit as st
 
 class EmbeddingsManager:
     def __init__(
@@ -11,10 +11,13 @@ class EmbeddingsManager:
         model_name: str = "BAAI/bge-small-en",
         device: str = "cpu",
         encode_kwargs: dict = {"normalize_embeddings": True},
-        qdrant_url: str = st.secrets["QDRANT_URL"],
-        qdrant_api_key: str = st.secrets["QDRANT_API_KEY"],
+        qdrant_url: str = st.secrets["QDRANT_URL"],    # Replace with actual
+        qdrant_api_key: str = st.secrets["QDRANT_API_KEY"],  # Replace with your API key
         collection_name: str = "vector_db",
     ):
+        """
+        Initializes the EmbeddingsManager with the specified model and Qdrant Cloud settings.
+        """
         self.model_name = model_name
         self.device = device
         self.encode_kwargs = encode_kwargs
@@ -29,10 +32,13 @@ class EmbeddingsManager:
         )
 
     def create_embeddings(self, pdf_path: str):
+        """
+        Processes the PDF, creates embeddings, and stores them in Qdrant Cloud.
+        """
         if not os.path.exists(pdf_path):
             raise FileNotFoundError(f"The file {pdf_path} does not exist.")
 
-        loader = PyMuPDFLoader(pdf_path)
+        loader = UnstructuredPDFLoader(pdf_path)
         docs = loader.load()
         if not docs:
             raise ValueError("No documents were loaded from the PDF.")
@@ -49,7 +55,7 @@ class EmbeddingsManager:
                 splits,
                 self.embeddings,
                 url=self.qdrant_url,
-                api_key=self.qdrant_api_key,
+                api_key=self.qdrant_api_key,  # ✅ required for Qdrant Cloud
                 prefer_grpc=False,
                 collection_name=self.collection_name,
             )
