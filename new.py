@@ -2,7 +2,6 @@ import streamlit as st
 from streamlit import session_state
 import time
 import io
-from pdf2image import convert_from_bytes
 from PIL import Image
 from vectors import EmbeddingsManager
 from chatbot import ChatbotManager
