@@ -1,32 +1,33 @@
 import streamlit as st
 from streamlit import session_state
 import time
-import base64
-import os
 import io
-from PyPDF2 import PdfReader
 from pdf2image import convert_from_bytes
 from PIL import Image
 from vectors import EmbeddingsManager
 from chatbot import ChatbotManager
+import base64
+import streamlit as st
+
+import fitz  # PyMuPDF
+from PIL import Image
+import io
 
 def displayPDF(file):
     try:
-        # Reset file pointer to beginning
-        file.seek(0)
-        pdf_bytes = file.read()
-        
-        # Convert first page to image
-        images = convert_from_bytes(pdf_bytes, first_page=1, last_page=1, dpi=150)
-        
-        if images:
-            st.markdown("### 📖 PDF Preview (First Page)")
-            st.image(images[0], use_column_width=True)
-        else:
-            st.warning("No pages found in the PDF")
-            
+        # Load the file into PyMuPDF
+        pdf_data = file.read()
+        doc = fitz.open(stream=pdf_data, filetype="pdf")
+
+        st.markdown("### 📖 PDF Preview (First 3 Pages)")
+        for page_num in range(min(3, len(doc))):  # Show up to 3 pages
+            page = doc.load_page(page_num)
+            pix = page.get_pixmap(dpi=150)
+            img_data = pix.tobytes("png")
+            st.image(Image.open(io.BytesIO(img_data)), use_column_width=True)
+
     except Exception as e:
-        st.error(f"❌ Error displaying PDF: {e}")
+        st.error(f"❌ Error displaying PDF preview: {e}")
 
 
 # Initialize session_state variables if not already present
