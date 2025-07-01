@@ -1,7 +1,7 @@
 import os
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Qdrant
 import streamlit as st
 
@@ -25,7 +25,7 @@ class EmbeddingsManager:
         self.qdrant_api_key = qdrant_api_key
         self.collection_name = collection_name
 
-        self.embeddings = HuggingFaceBgeEmbeddings(
+        self.embeddings = HuggingFaceEmbeddings(
             model_name=self.model_name,
             model_kwargs={"device": self.device},
             encode_kwargs=self.encode_kwargs,
