@@ -10,13 +10,19 @@ from langchain.chains import RetrievalQA
 class ChatbotManager:
     def __init__(
         self,
-        openrouter_api_key =  st.secrets["OPENROUTER_API_KEY"],
+        openrouter_api_key=st.secrets["OPENROUTER_API_KEY"],
         qdrant_url=st.secrets["QDRANT_URL"],
         qdrant_api_key=st.secrets["QDRANT_API_KEY"],
         collection_name: str = "vector_db",
         model_name: str = "BAAI/bge-small-en",
         device: str = "cpu",
+        encode_kwargs: dict = {"normalize_embeddings": True}
     ):
+        # Save embedding config
+        self.model_name = model_name
+        self.device = device
+        self.encode_kwargs = encode_kwargs
+
         # Set up embeddings
         self.embeddings = HuggingFaceEmbeddings(
             model_name=self.model_name,
@@ -39,7 +45,7 @@ class ChatbotManager:
         self.llm = ChatOpenAI(
             openai_api_base="https://openrouter.ai/api/v1",
             openai_api_key=openrouter_api_key,
-            model="deepseek/deepseek-r1:free",  # ✅ OpenRouter model name
+            model="deepseek/deepseek-r1:free",  # ✅ This is correct
             temperature=0.7,
         )
 
