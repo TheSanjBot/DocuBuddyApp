@@ -104,6 +104,7 @@ elif choice == "🤖 Chatbot":
             st.session_state['temp_pdf_path'] = temp_pdf_path
 
     # Column 2: Create Embeddings
+    # Column 2: Create Embeddings
     with col2:
         st.header("🧠 Embeddings")
         create_embeddings = st.checkbox("✅ Create Embeddings")
@@ -122,23 +123,22 @@ elif choice == "🤖 Chatbot":
                         collection_name="vector_db"
                     )
 
-                    
                     with st.spinner("🔄 Embeddings are in process..."):
-                        # Create embeddings
                         result = embeddings_manager.create_embeddings(st.session_state['temp_pdf_path'])
-                        time.sleep(1)  # Optional: To show spinner for a bit longer
+                        time.sleep(1)
                     st.success(result)
-                    
-                    # Initialize the ChatbotManager after embeddings are created
-                    if st.session_state['chatbot_manager'] is None:
-                        st.session_state['chatbot_manager'] = ChatbotManager(
-                            openrouter_api_key=st.secrets["OPENROUTER_API_KEY"],
-                            qdrant_url=st.secrets["QDRANT_URL"],
-                            qdrant_api_key=st.secrets["QDRANT_API_KEY"],
-                            collection_name="vector_db"
-                        )
 
-                    
+                    # ✅ Always reinitialize chatbot for the new document
+                    st.session_state['chatbot_manager'] = ChatbotManager(
+                        openrouter_api_key=st.secrets["OPENROUTER_API_KEY"],
+                        qdrant_url=st.secrets["QDRANT_URL"],
+                        qdrant_api_key=st.secrets["QDRANT_API_KEY"],
+                        collection_name="vector_db"
+                    )
+
+                    # ✅ Also clear old conversation
+                    st.session_state['messages'] = []
+
                 except FileNotFoundError as fnf_error:
                     st.error(fnf_error)
                 except ValueError as val_error:
