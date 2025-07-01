@@ -19,6 +19,7 @@ langchain-huggingface==0.1.1
 # Unstructured PDF loading
 unstructured==0.18.1
 unstructured-inference==1.0.5
+unstructured[local-inference]
 
 # Text splitter
 langchain-text-splitters==0.3.8
