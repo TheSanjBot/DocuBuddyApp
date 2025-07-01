@@ -18,7 +18,6 @@ def displayPDF(file):
         pdf_data = file.read()
         doc = fitz.open(stream=pdf_data, filetype="pdf")
 
-        st.markdown("### 📖 PDF Preview (First 3 Pages)")
         for page_num in range(min(3, len(doc))):  # Show up to 3 pages
             page = doc.load_page(page_num)
             pix = page.get_pixmap(dpi=150)
